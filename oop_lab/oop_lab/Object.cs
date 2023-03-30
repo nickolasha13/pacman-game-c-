@@ -17,6 +17,11 @@ namespace oop_lab
             Console.ForegroundColor= Color;
             Console.Write(Symbol);
         }
+        public void EraseObject()
+        {
+            Console.SetCursorPosition(Position.X, Position.Y);
+            Console.Write(" ");
+        }
         public Object(Point position, char symbol, ConsoleColor color)
         {
             Position = position;
