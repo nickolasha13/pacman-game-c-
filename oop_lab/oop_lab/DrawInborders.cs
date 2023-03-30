@@ -8,6 +8,7 @@ namespace oop_lab
 {
     public class DrawInborders
     {
+        public static List<Point> extraborders = new List<Point>();
         public char Symbol { get; set; }
         public Point SetPointPosition { get; set; }
         public int InBorderWidth { get; set; }
@@ -45,6 +46,7 @@ namespace oop_lab
                 for (int j = 0; j < InBorderWidth; j++)
                 {
                     Console.Write(Symbol);
+                    extraborders.Add(SetPointPosition);
                 }
             }
         }

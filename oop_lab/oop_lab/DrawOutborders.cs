@@ -8,6 +8,7 @@ namespace oop_lab
 {
     public class DrawOutborders
     {
+        public static List <Point> borderbox = new List <Point> ();
         public char Symbol { get; set; }
         public Point SetPointPosition { get; set; }
         public int BorderWidth { get; set; }
@@ -25,6 +26,7 @@ namespace oop_lab
             for (int i = 0; i < BorderWidth; i++)
             {
                 Console.Write(Symbol);
+                borderbox.Add(start);
             }
         }
         public void Vertical(Point start)
@@ -34,6 +36,7 @@ namespace oop_lab
             {
                 Console.SetCursorPosition(start.X, StartY);
                 Console.Write(Symbol);
+                borderbox.Add(start);
             }
         }
         public void Draw()
