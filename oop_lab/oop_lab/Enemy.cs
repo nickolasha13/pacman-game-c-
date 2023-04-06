@@ -10,5 +10,10 @@ namespace oop_lab
     {
         public const bool IsEnemy = true;
         public Enemy(Point position, char symbol, ConsoleColor color) : base(position, symbol, color) { }
+
+        public bool Collision()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

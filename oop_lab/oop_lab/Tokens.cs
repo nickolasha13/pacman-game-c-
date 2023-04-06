@@ -6,12 +6,11 @@ using System.Threading.Tasks;
 
 namespace oop_lab
 {
-    public class Tokens
+    public class Tokens : Blocks
     {
         public char Symbol { get; set; }
         public static List<Point> TokenList = new List<Point>();
-
-        public Tokens(char symbol)
+        public Tokens(Point blockPosition, char symbol) : base(blockPosition) 
         {
             Symbol = symbol;
         }

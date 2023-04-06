@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace oop_lab
 {
-    public class Object
+    public abstract class Object
     {
         public Point Position { get; set; }
         public char Symbol { get; set; }

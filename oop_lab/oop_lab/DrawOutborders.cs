@@ -6,27 +6,26 @@ using System.Threading.Tasks;
 
 namespace oop_lab
 {
-    public class DrawOutborders
+    public class DrawOutborders : Blocks
     {
         public static List <Point> borderbox = new List <Point> ();
         public char Symbol { get; set; }
-        public Point SetPointPosition { get; set; }
         public int BorderWidth { get; set; }
         public int BorderHeight { get; set; }
-        public DrawOutborders(char symbol, Point setpointposition, int borderWidth, int borderHeight)
+        public DrawOutborders(char symbol, Point blockPosition, int borderWidth, int borderHeight) : base(blockPosition)
         {
             Symbol = symbol;
-            SetPointPosition = setpointposition;
             BorderWidth = borderWidth;
             BorderHeight = borderHeight;
         }
         public void Horizontal(Point start)
         {
-            Console.SetCursorPosition(start.X, start.Y);
-            for (int i = 0; i < BorderWidth; i++)
+            int startX = start.X;
+            for (int i = 0; i < BorderWidth; i++, startX++)
             {
+                Console.SetCursorPosition(startX, start.Y);
                 Console.Write(Symbol);
-                borderbox.Add(start);
+                borderbox.Add(new Point(startX,start.Y));
             }
         }
         public void Vertical(Point start)
@@ -36,15 +35,15 @@ namespace oop_lab
             {
                 Console.SetCursorPosition(start.X, StartY);
                 Console.Write(Symbol);
-                borderbox.Add(start);
+                borderbox.Add(new Point(start.X, StartY));
             }
         }
         public void Draw()
         {
-            Horizontal(SetPointPosition);
-            Horizontal(new Point(SetPointPosition.X, SetPointPosition.Y + BorderHeight - 1));
-            Vertical(SetPointPosition);
-            Vertical(new Point(SetPointPosition.X + BorderWidth, SetPointPosition.Y));
+            Horizontal(BlockPosition);
+            Horizontal(new Point(BlockPosition.X, BlockPosition.Y + BorderHeight - 1));
+            Vertical(BlockPosition);
+            Vertical(new Point(BlockPosition.X + BorderWidth, BlockPosition.Y));
         }
     }
 }

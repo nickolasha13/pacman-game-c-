@@ -15,5 +15,11 @@ namespace oop_lab
             X = x;
             Y = y;
         }
+        public override bool Equals(object? obj)
+        {
+            Point point = obj as Point;
+            if (point.X == X && point.Y == Y) return true;
+            else return false;
+        }
     }
 }

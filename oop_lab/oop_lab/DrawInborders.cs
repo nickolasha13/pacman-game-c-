@@ -6,17 +6,15 @@ using System.Threading.Tasks;
 
 namespace oop_lab
 {
-    public class DrawInborders
+    public class DrawInborders : Blocks
     {
         public static List<Point> extraborders = new List<Point>();
         public char Symbol { get; set; }
-        public Point SetPointPosition { get; set; }
         public int InBorderWidth { get; set; }
         public int InBorderHeight { get; set; }
-        public DrawInborders(char symbol, Point setpointposition, int inBorderWidth, int inBorderHeight)
+        public DrawInborders(char symbol, Point blockPosition, int inBorderWidth, int inBorderHeight) : base(blockPosition)
         {
             Symbol = symbol;
-            SetPointPosition = setpointposition;
             InBorderWidth = inBorderWidth;
             InBorderHeight = inBorderHeight;
         }
@@ -39,14 +37,14 @@ namespace oop_lab
         }
         public void Draw()
         {
-            int StartY = SetPointPosition.Y;
+            int StartY = BlockPosition.Y;
             for (int i = 0; i < InBorderHeight; i++, StartY++)
             {
-                Console.SetCursorPosition(SetPointPosition.X, StartY);
+                Console.SetCursorPosition(BlockPosition.X, StartY);
                 for (int j = 0; j < InBorderWidth; j++)
                 {
                     Console.Write(Symbol);
-                    extraborders.Add(SetPointPosition);
+                    extraborders.Add(BlockPosition);
                 }
             }
         }
