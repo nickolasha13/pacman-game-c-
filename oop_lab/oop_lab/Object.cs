@@ -28,5 +28,17 @@ namespace oop_lab
             Symbol = symbol;
             Color = color;
         }
+        public bool Collision()
+        {
+            List<Point> blocks = DrawOutborders.borderbox.Union(DrawInborders.extraborders).ToList();
+            foreach (var block in blocks)
+            {
+                if (block.Equals(Position))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }

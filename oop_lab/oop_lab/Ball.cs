@@ -8,8 +8,12 @@ namespace oop_lab
 {
     public class Ball : Object
     {
+        private readonly Tokens token;
         public const bool IsEnemy = false;
-        public Ball(Point position, char symbol, ConsoleColor color): base(position,symbol,color) { }
+        public Ball(Point position, char symbol, ConsoleColor color, Tokens token): base(position,symbol,color) 
+        { 
+            this.token = token;
+        }
         public void BallMovement(Program.Direction direction, ref int Score)
         {
             EraseObject();
@@ -23,6 +27,7 @@ namespace oop_lab
                 else if (TokenCollision()) 
                 {
                     Score++;
+                    token.TokenList.Remove(Position);
                 }
             }
             if (Program.Direction.down == direction)
@@ -35,6 +40,7 @@ namespace oop_lab
                 else if (TokenCollision())
                 {
                     Score++;
+                    token.TokenList.Remove(Position);
                 }
             }
             if (Program.Direction.left == direction)
@@ -47,6 +53,7 @@ namespace oop_lab
                 else if (TokenCollision())
                 {
                     Score++;
+                    token.TokenList.Remove(Position);
                 }
             }
             if (Program.Direction.right == direction)
@@ -59,25 +66,16 @@ namespace oop_lab
                 else if (TokenCollision())
                 {
                     Score++;
+                    token.TokenList.Remove(Position);
                 }
             }
             PrintObject();
+            Program.End();
         }
-        public bool Collision()
-        {
-            List<Point> blocks = DrawOutborders.borderbox.Union(DrawInborders.extraborders).ToList();
-            foreach (var block in blocks)
-            {
-                if (block.Equals(Position)) 
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
+
         public bool TokenCollision()
         {
-            foreach (var token in Tokens.TokenList)
+            foreach (var token in token.TokenList)
             {
                 if (token.Equals(Position))
                 {

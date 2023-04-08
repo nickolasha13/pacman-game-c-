@@ -16,11 +16,13 @@ namespace oop_lab
             d.Draw();
             //DrawInborders fill = new DrawInborders('@', new Point(5, 5), 3, 3);
             //fill.Draw();
-            Ball ball= new Ball(new Point(4,4), 'o', ConsoleColor.Magenta );
+            Tokens token = new Tokens(new Point(0, 0), '@', d);
+            token.Create(30);
+            Ball ball= new Ball(new Point(4,4), 'o', ConsoleColor.Yellow, token);
             ball.PrintObject();
-            Tokens token = new Tokens(new Point(0,0), '@');
-            token.CreateToken(new Point(1, 1), 39, 19, 40);
             int Score = 0;
+            Bomb bomb = new Bomb(new Point(0, 0), '*', d, token);
+            bomb.Create(10);
             Point scorePoint = new Point(45, 10);
             while(true)
             {
@@ -52,7 +54,6 @@ namespace oop_lab
         {
             Console.BackgroundColor = ConsoleColor.Black;
             Console.ForegroundColor = ConsoleColor.White;
-            Console.SetCursorPosition(50, 50);
         }
         public static void SetScore(int Score, Point point)
         {

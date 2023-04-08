@@ -6,15 +6,17 @@ using System.Threading.Tasks;
 
 namespace oop_lab
 {
-    public class DrawOutborders : Blocks
+    public class DrawOutborders
     {
         public static List <Point> borderbox = new List <Point> ();
         public char Symbol { get; set; }
+        public Point BlockPosition { get; set; }
         public int BorderWidth { get; set; }
         public int BorderHeight { get; set; }
-        public DrawOutborders(char symbol, Point blockPosition, int borderWidth, int borderHeight) : base(blockPosition)
+        public DrawOutborders(char symbol, Point blockPosition, int borderWidth, int borderHeight)
         {
             Symbol = symbol;
+            BlockPosition = blockPosition;
             BorderWidth = borderWidth;
             BorderHeight = borderHeight;
         }
