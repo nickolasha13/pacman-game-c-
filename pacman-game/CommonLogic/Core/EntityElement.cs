@@ -3,10 +3,14 @@
 public abstract class EntityElement : Element
 {
     public Vec2 Position;
+    public Vec2 PreUpdatePosition;
 
     protected EntityElement(Engine engine) : base(engine)
     {
     }
 
-    public abstract void Update(float deltaTime);
+    public virtual void Update(float deltaTime)
+    {
+        this.PreUpdatePosition = this.Position;
+    }
 }

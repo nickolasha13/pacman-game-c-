@@ -23,24 +23,37 @@ public class EngineConsole : Engine
         this._screenRenderers.Add(typeof(MenuScreen), new MenuRenderer());
         this._screenRenderers.Add(typeof(DialogScreen), new DialogRenderer());
     }
-
+    
+    private int _fpsCounter = 0;
+    private int _fps = 0;
+    private float _fpsTimer = 0;
+    
     private void Render(float deltaTime)
     {
+        this._fpsCounter++;
+        this._fpsTimer += deltaTime;
+        if (_fpsTimer >= 1)
+        {
+            this._fps = _fpsCounter;
+            this._fpsCounter = 0;
+            this._fpsTimer = 0;
+        }
+        
         var windowWidth = Console.WindowWidth;
         var windowHeight = Console.WindowHeight;
         var buffer = new Symbol?[windowHeight, windowWidth];
-        if (World != null && Screens.Count == 0)
+        if (this.World != null && this.Screens.Count == 0)
         {
-            var shiftX = windowWidth / 2 - World.Map.GetLength(1) / 2;
-            var shiftY = windowHeight / 2 - World.Map.GetLength(0) / 2;
-            for (var y = 0; y < World.Map.GetLength(0); y++)
+            var shiftX = windowWidth / 2 - this.World.Map.GetLength(1) / 2;
+            var shiftY = windowHeight / 2 - this.World.Map.GetLength(0) / 2;
+            for (var y = 0; y < this.World.Map.GetLength(0); y++)
             {
-                for (var x = 0; x < World.Map.GetLength(1); x++)
+                for (var x = 0; x < this.World.Map.GetLength(1); x++)
                 {
-                    var element = World.Map[y, x];
-                    if (!Extensions.ContainsKey(element.GetType()))
+                    var element =this. World.Map[y, x];
+                    if (!this.Extensions.ContainsKey(element.GetType()))
                         continue;
-                    foreach (var ext in Extensions[element.GetType()])
+                    foreach (var ext in this.Extensions[element.GetType()])
                     {
                         if (ext.GetType().IsInstanceOfType(typeof(RenderExtension<>)))
                             continue;
@@ -57,9 +70,9 @@ public class EngineConsole : Engine
             }
             foreach (var element in World.Entities)
             {
-                if (!Extensions.ContainsKey(element.GetType()))
+                if (!this.Extensions.ContainsKey(element.GetType()))
                     continue;
-                foreach (var ext in Extensions[element.GetType()])
+                foreach (var ext in this.Extensions[element.GetType()])
                 {
                     if (ext.GetType().IsInstanceOfType(typeof(RenderExtension<>)))
                         continue;
@@ -74,7 +87,7 @@ public class EngineConsole : Engine
                 }
             }
             var textLines = new List<string>();
-            textLines.Add($"FPS: {(int)(1.0 / deltaTime)}");
+            textLines.Add($"FPS: {this._fps}");
             textLines.Add($"Score: {World.Score}");
             textLines.Add($"Lives: {World.Lives}");
             for (var i = 0; i < textLines.Count; i++)
@@ -82,7 +95,7 @@ public class EngineConsole : Engine
                 var line = textLines[i];
                 for (var j = 0; j < line.Length; j++)
                 {
-                    buffer[i, j] = new Symbol(line[j], j, i, ConsoleColor.White, ConsoleColor.Black);
+                    buffer[i, j] = new Symbol(line[j], j, i, 255, 0);
                 }
             }
         }
@@ -95,6 +108,9 @@ public class EngineConsole : Engine
             }
         }
 
+        var strBuff = "\x1b[48;5;0m\x1b[38;5;0m";
+        byte? currentForeground = 0;
+        byte? currentBackground = 0;
         for (var y = 0; y < windowHeight; y++)
         {
             for (var x = 0; x < windowWidth; x++)
@@ -102,20 +118,52 @@ public class EngineConsole : Engine
                 var symbol = buffer[y, x];
                 if (symbol == null)
                 {
-                    Console.SetCursorPosition(x, y);
-                    Console.BackgroundColor = ConsoleColor.Black;
-                    Console.ForegroundColor = ConsoleColor.Black;
-                    Console.Write(' ');
+                    if (currentBackground != 0)
+                    {
+                        strBuff += "\x1b[48;5;0m";
+                        currentBackground = 0;
+                    }
+                    if (currentForeground != 0)
+                    {
+                        strBuff += "\x1b[38;5;0m";
+                        currentForeground = 0;
+                    }
+                    strBuff += ' ';
                 }
                 else
                 {
-                    Console.SetCursorPosition(x, y);
-                    Console.ForegroundColor = symbol.Value.Foreground ?? Console.ForegroundColor;
-                    Console.BackgroundColor = symbol.Value.Background ?? Console.BackgroundColor;
-                    Console.Write(symbol.Value.Character);
+                    if (symbol.Value.Background != currentBackground && symbol.Value.Background != null)
+                    {
+                        if (symbol.Value.Background != null)
+                        {
+                            strBuff += "\x1b[48;5;" + symbol.Value.Background + "m";
+                            currentBackground = symbol.Value.Background;
+                        }
+                        else
+                        {
+                            strBuff += "\x1b[48;5;0m";
+                            currentBackground = null;
+                        }
+                    }
+                    if (symbol.Value.Foreground != currentForeground)
+                    {
+                        if (symbol.Value.Foreground != null)
+                        {
+                            strBuff += "\x1b[38;5;" + symbol.Value.Foreground + "m";
+                            currentForeground = symbol.Value.Foreground;
+                        }
+                        else
+                        {
+                            strBuff += "\x1b[38;5;0m";
+                            currentForeground = null;
+                        }
+                    }
+                    strBuff += symbol.Value.Character;
                 }
             }
         }
+        Console.SetCursorPosition(0, 0);
+        Console.Write(strBuff);
     }
     
     public override void Update(float deltaTime)

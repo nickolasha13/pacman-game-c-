@@ -23,6 +23,24 @@ public class DialogRenderer : IScreenRenderer
  ##   ##  #####  ##     #####
  ##   ##   ###   ##     ## ###
   #####     #    ###### ##  ###";
+
+    private const string YouWin = @"
+###  ###    ######    ###   ###
+###  ###  ###    ###  ###   ###
+###  ###  ###    ###  ###   ###
+ ######   ###    ###  ###   ###
+   ##     ###    ###  ###   ###
+   ##     ###    ###  ###   ###
+   ##       ######     #######
+
+
+###      ###  ######  ###   ###
+###      ###   ####   ####  ###
+###      ###   ####   ##### ###
+###  ##  ###   ####   #########
+############   ####   ### #####
+#####  #####   ####   ###  ####
+###      ###  ######  ###   ###";
     public void Render(Screen screen, Vec2 dimensions, Symbol?[,] buffer)
     {
         var dialogScreen = (DialogScreen)screen;
@@ -31,6 +49,7 @@ public class DialogRenderer : IScreenRenderer
         switch (dialogScreen.DialogType)
         {
             case DialogScreen.Type.GameOver: splashArtText = GameOver; break;
+            case DialogScreen.Type.YouWin: splashArtText = YouWin; break;
         }
         
         var textLines = dialogScreen.Text.ReplaceLineEndings().Split('\n');
@@ -54,7 +73,7 @@ public class DialogRenderer : IScreenRenderer
                 {
                     if (x >= splashLines[y].Length) continue;
                     if (splashY + y >= dimensions.Y || splashX + x >= dimensions.X || splashY + y < 0 || splashX + x < 0) continue;
-                    buffer[splashY + y, splashX + x] = new Symbol(splashLines[y][x], splashX + x, splashY + y, ConsoleColor.White, ConsoleColor.Black);
+                    buffer[splashY + y, splashX + x] = new Symbol(splashLines[y][x], splashX + x, splashY + y, 255, 0);
                 }
             }
         }
@@ -70,7 +89,7 @@ public class DialogRenderer : IScreenRenderer
             var textX = (dimensions.X - textLines.Max(l => l.Length)) / 2;
             for (var i = 0; i < textLines.Length; i++)
             {
-                PrintText(textLines[i], textX, textY + i, ConsoleColor.White, ConsoleColor.Black, buffer);
+                PrintText(textLines[i], textX, textY + i, 255, 0, buffer);
             }
         }
         
@@ -82,14 +101,14 @@ public class DialogRenderer : IScreenRenderer
         for (var i = 0; i < dialogScreen.Buttons.Length; i++)
         {
             var button = dialogScreen.Buttons[i];
-            var color = i == dialogScreen.SelectedButtonIndex ? ConsoleColor.Yellow : ConsoleColor.Gray;
-            var backgroundColor = i == dialogScreen.SelectedButtonIndex ? ConsoleColor.DarkGray : ConsoleColor.Black;
+            var color = i == dialogScreen.SelectedButtonIndex ? (byte) 11 : (byte) 8;
+            var backgroundColor = i == dialogScreen.SelectedButtonIndex ? (byte) 238 : (byte) 0;
             PrintText(button.Text, buttonsX, buttonsY, color, backgroundColor, buffer);
             buttonsX += button.Text.Length + 1;
         }
     }
         
-    private void PrintText(string text, int x, int y, ConsoleColor color, ConsoleColor backgroundColor, Symbol?[,] buffer)
+    private void PrintText(string text, int x, int y, byte color, byte backgroundColor, Symbol?[,] buffer)
     {
         for (var i = 0; i < text.Length; i++)
         {

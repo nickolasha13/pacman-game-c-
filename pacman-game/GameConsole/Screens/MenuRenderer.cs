@@ -12,18 +12,18 @@ public class MenuRenderer : IScreenRenderer
 
         var y = 1;
         
-        PrintText(menuScreen.Title, 1, y, ConsoleColor.Cyan, ConsoleColor.Black, buffer);
+        PrintText(menuScreen.Title, 1, y, 14, 0, buffer);
         
         y += 2;
         
         for (var i = 0; i < menuScreen.Entries.Length; i++)
         {
             var entry = menuScreen.Entries[i];
-            var color = i == menuScreen.SelectedEntryIndex ? ConsoleColor.Yellow : ConsoleColor.Gray;
-            var backgroundColor = i == menuScreen.SelectedEntryIndex ? ConsoleColor.DarkGray : ConsoleColor.Black;
+            var color = i == menuScreen.SelectedEntryIndex ? (byte) 11 : (byte) 248;
+            var backgroundColor = i == menuScreen.SelectedEntryIndex ? (byte) 238 : (byte) 0;
             PrintText(entry.Text, 1, y, color, backgroundColor, buffer);
             if (entry.SubText != null)
-                PrintText(entry.SubText, 2 + entry.Text.Length, y, ConsoleColor.Gray, ConsoleColor.Black, buffer);
+                PrintText(entry.SubText, 2 + entry.Text.Length, y, 8, 0, buffer);
             y++;
         }
         y += 1;
@@ -31,12 +31,12 @@ public class MenuRenderer : IScreenRenderer
         var description = menuScreen.Entries[menuScreen.SelectedEntryIndex].Description;
         if (description != null)
         {
-            PrintText(description, 1, y, ConsoleColor.Cyan, ConsoleColor.Black, buffer);
+            PrintText(description, 1, y, 14, 0, buffer);
             y += 2;
         }
     }
     
-    private void PrintText(string text, int x, int y, ConsoleColor color, ConsoleColor backgroundColor, Symbol?[,] buffer)
+    private void PrintText(string text, int x, int y, byte color, byte backgroundColor, Symbol?[,] buffer)
     {
         for (var i = 0; i < text.Length; i++)
         {

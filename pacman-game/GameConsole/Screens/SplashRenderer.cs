@@ -36,7 +36,7 @@ public class SplashRenderer : IScreenRenderer
             {
                 if (x >= splashLines[y].Length) continue;
                 if (splashY + y >= dimensions.Y || splashX + x >= dimensions.X || splashY + y < 0 || splashX + x < 0) continue;
-                buffer[splashY + y, splashX + x] = new Symbol(splashLines[y][x], splashX + x, splashY + y, ConsoleColor.White, ConsoleColor.Black);
+                buffer[splashY + y, splashX + x] = new Symbol(splashLines[y][x], splashX + x, splashY + y, 255, 0);
             }
         }
     }

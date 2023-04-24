@@ -17,12 +17,12 @@ public abstract class RenderExtension<TElement> : IElementExtension, IRenderExte
 public struct Symbol
 {
     public char Character;
-    public ConsoleColor? Foreground;
-    public ConsoleColor? Background;
+    public byte? Foreground;
+    public byte? Background;
     public int X;
     public int Y;
 
-    public Symbol(char character, int x, int y, ConsoleColor? foreground = null, ConsoleColor? background = null)
+    public Symbol(char character, int x, int y, byte? foreground = null, byte? background = null)
     {
         Character = character;
         Foreground = foreground;

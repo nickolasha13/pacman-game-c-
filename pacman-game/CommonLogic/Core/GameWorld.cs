@@ -75,6 +75,14 @@ public class GameWorld: IDisposable
         Entities.Remove(entity);
     }
 
+    public bool CheckVictory()
+    {
+        foreach (var entity in Entities)
+            if (entity is Energizer or Coin) return false;
+        
+        return true;
+    }
+    
     public void Dispose()
     {
         _disposed = true;

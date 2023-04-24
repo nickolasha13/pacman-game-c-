@@ -7,7 +7,8 @@ public class DialogScreen : Screen
     public enum Type
     {
         Regular,
-        GameOver
+        GameOver,
+        YouWin
     }
     
     public struct Button

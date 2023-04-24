@@ -77,11 +77,15 @@ public abstract class Engine
         }));
     }
     
-    public void GameOver(int score)
+    public void GameOver(int score, bool win)
     {
         this.World?.Dispose();
         this.World = null;
-        this.OpenScreen(new DialogScreen(this, DialogScreen.Type.GameOver, $"Game Over!\nYour score: {score}", new[]
+        this.OpenScreen(new DialogScreen(
+            this,
+            win ? DialogScreen.Type.YouWin : DialogScreen.Type.GameOver, 
+            win ? $"Game Over!\nYour score: {score}" : $"You win!\nYour score: {score}",
+            new[]
         {
             new DialogScreen.Button("Ok", (screen) =>
             {

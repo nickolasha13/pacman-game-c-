@@ -14,11 +14,12 @@ public abstract class Ghost : EntityElement
 
     public override void Update(float deltaTime)
     {
+        base.Update(deltaTime);
         this.IsReverse = this.Engine.World!.IsGhostsFrightened;
         if (this.Engine.World.IsGhostsFrightened)
-            this.Target = this.Engine.World.Pacman.Position;
+            this.Target = this.Engine.World.Pacman.PreUpdatePosition;
         
-        if (this.Position.Equals(this.Engine.World.Pacman.Position))
+        if (this.PreUpdatePosition.Equals(this.Engine.World.Pacman.PreUpdatePosition))
         {
             if (this.Engine.World.IsGhostsFrightened)
             {
@@ -33,7 +34,7 @@ public abstract class Ghost : EntityElement
                 this.Engine.World.Lives--;
                 if (this.Engine.World.Lives == 0)
                 {
-                    this.Engine.GameOver(this.Engine.World.Score);
+                    this.Engine.GameOver(this.Engine.World.Score, false);
                     return;
                 }
             }

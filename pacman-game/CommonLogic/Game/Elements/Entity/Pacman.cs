@@ -21,6 +21,7 @@ public class Pacman : EntityElement
     
     public override void Update(float deltaTime)
     {
+        base.Update(deltaTime);
         if (this.Engine.Input.IsReceived(InputProvider.Signal.Up))
             this._nextDirection = Direction.Up;
         if (this.Engine.Input.IsReceived(InputProvider.Signal.Down))
