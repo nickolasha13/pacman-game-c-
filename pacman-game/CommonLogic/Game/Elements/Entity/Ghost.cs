@@ -17,9 +17,11 @@ public abstract class Ghost : EntityElement
         base.Update(deltaTime);
         this.IsReverse = this.Engine.World!.IsGhostsFrightened;
         if (this.Engine.World.IsGhostsFrightened)
-            this.Target = this.Engine.World.Pacman.PreUpdatePosition;
-        
-        if (this.PreUpdatePosition.Equals(this.Engine.World.Pacman.PreUpdatePosition))
+            this.Target = this.Engine.World.Pacman.Position;
+
+        this.Move(deltaTime);
+
+        if (this.Position.Equals(this.Engine.World.Pacman.Position))
         {
             if (this.Engine.World.IsGhostsFrightened)
             {
@@ -39,8 +41,6 @@ public abstract class Ghost : EntityElement
                 }
             }
         }
-        
-        this.Move(deltaTime);
     }
 
     protected Vec2 InitialPosition;

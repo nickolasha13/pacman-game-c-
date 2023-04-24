@@ -84,7 +84,7 @@ public abstract class Engine
         this.OpenScreen(new DialogScreen(
             this,
             win ? DialogScreen.Type.YouWin : DialogScreen.Type.GameOver, 
-            win ? $"Game Over!\nYour score: {score}" : $"You win!\nYour score: {score}",
+            win ? $"You win!\nYour score: {score}" : $"Game Over!\nYour score: {score}",
             new[]
         {
             new DialogScreen.Button("Ok", (screen) =>

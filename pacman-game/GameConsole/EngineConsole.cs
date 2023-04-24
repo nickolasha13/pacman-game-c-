@@ -108,7 +108,8 @@ public class EngineConsole : Engine
             }
         }
 
-        var strBuff = "\x1b[48;5;0m\x1b[38;5;0m";
+        var strBuff = new string[windowHeight];
+        for (var i = 0; i < windowHeight; i++) strBuff[i] = "\x1b[48;5;0m\x1b[38;5;0m";
         byte? currentForeground = 0;
         byte? currentBackground = 0;
         for (var y = 0; y < windowHeight; y++)
@@ -120,15 +121,15 @@ public class EngineConsole : Engine
                 {
                     if (currentBackground != 0)
                     {
-                        strBuff += "\x1b[48;5;0m";
+                        strBuff[y] += "\x1b[48;5;0m";
                         currentBackground = 0;
                     }
                     if (currentForeground != 0)
                     {
-                        strBuff += "\x1b[38;5;0m";
+                        strBuff[y] += "\x1b[38;5;0m";
                         currentForeground = 0;
                     }
-                    strBuff += ' ';
+                    strBuff[y] += ' ';
                 }
                 else
                 {
@@ -136,12 +137,12 @@ public class EngineConsole : Engine
                     {
                         if (symbol.Value.Background != null)
                         {
-                            strBuff += "\x1b[48;5;" + symbol.Value.Background + "m";
+                            strBuff[y] += "\x1b[48;5;" + symbol.Value.Background + "m";
                             currentBackground = symbol.Value.Background;
                         }
                         else
                         {
-                            strBuff += "\x1b[48;5;0m";
+                            strBuff[y] += "\x1b[48;5;0m";
                             currentBackground = null;
                         }
                     }
@@ -149,23 +150,27 @@ public class EngineConsole : Engine
                     {
                         if (symbol.Value.Foreground != null)
                         {
-                            strBuff += "\x1b[38;5;" + symbol.Value.Foreground + "m";
+                            strBuff[y] += "\x1b[38;5;" + symbol.Value.Foreground + "m";
                             currentForeground = symbol.Value.Foreground;
                         }
                         else
                         {
-                            strBuff += "\x1b[38;5;0m";
+                            strBuff[y] += "\x1b[38;5;0m";
                             currentForeground = null;
                         }
                     }
-                    strBuff += symbol.Value.Character;
+                    strBuff[y] += symbol.Value.Character;
                 }
             }
         }
-        Console.SetCursorPosition(0, 0);
-        Console.Write(strBuff);
+        for (var i = 0; i < windowHeight; i++)
+        {
+            Console.SetCursorPosition(0, i);
+            Console.Write(strBuff[i]);
+            Console.Out.Flush();
+        }
     }
-    
+
     public override void Update(float deltaTime)
     {
         base.Update(deltaTime);
