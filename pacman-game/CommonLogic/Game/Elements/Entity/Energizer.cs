@@ -19,6 +19,7 @@ public class Energizer : EntityElement
             this.Engine.World.Score += 50;
             if (this.Engine.World.CheckVictory())
                 this.Engine.GameOver(this.Engine.World.Score, true);
+            this.Engine.AudioSystem.Play("pacman_eatfruit");
         }
     }
 }

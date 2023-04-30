@@ -18,15 +18,16 @@ public abstract class Ghost : EntityElement
         this.IsReverse = this.Engine.World!.IsGhostsFrightened;
         if (this.Engine.World.IsGhostsFrightened)
             this.Target = this.Engine.World.Pacman.Position;
-
+        
         this.Move(deltaTime);
-
+        
         if (this.Position.Equals(this.Engine.World.Pacman.Position))
         {
             if (this.Engine.World.IsGhostsFrightened)
             {
                 this.RespawnWithImmobilization(3);
                 this.Engine.World.Score += 100;
+                this.Engine.AudioSystem.Play("pacman_eatghost");
             }
             else
             {
@@ -39,6 +40,7 @@ public abstract class Ghost : EntityElement
                     this.Engine.GameOver(this.Engine.World.Score, false);
                     return;
                 }
+                this.Engine.AudioSystem.Play("pacman_death");
             }
         }
     }

@@ -25,8 +25,9 @@ public class ConsoleInputProvider : InputProvider
             var awaitingRebind = GetAwaitingRebind();
             if (awaitingRebind != null)
             {
-                if (keybindings.IsUsed(key.Key)) continue;
+                if (keybindings.IsUsed(key.Key) && keybindings.Get(awaitingRebind.Value) != key.Key) continue;
                 keybindings.Rebind(awaitingRebind.Value, key.Key);
+                ResetRebinding();
                 continue;
             }
             
@@ -51,5 +52,10 @@ public class ConsoleInputProvider : InputProvider
     public override void Dispose()
     {
         worker.Interrupt();
+    }
+
+    public override string GetSignalBindingAsString(Signal signal)
+    {
+        return keybindings.Get(signal).ToString();
     }
 }

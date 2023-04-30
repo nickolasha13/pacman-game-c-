@@ -18,6 +18,7 @@ public class Coin : EntityElement
             this.Engine.World.Score += 10;
             if (this.Engine.World.CheckVictory())
                 this.Engine.GameOver(this.Engine.World.Score, true);
+            this.Engine.AudioSystem.Play("pacman_chomp");
         }
     }
 }

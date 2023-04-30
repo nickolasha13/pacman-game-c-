@@ -12,18 +12,18 @@ public class MenuRenderer : IScreenRenderer
 
         var y = 1;
         
-        PrintText(menuScreen.Title, 1, y, 14, 0, buffer);
+        PrintText(menuScreen.Title!, 1, y, 14, 0, buffer);
         
         y += 2;
         
-        for (var i = 0; i < menuScreen.Entries.Length; i++)
+        for (var i = 0; i < menuScreen.Entries!.Length; i++)
         {
             var entry = menuScreen.Entries[i];
             var color = i == menuScreen.SelectedEntryIndex ? (byte) 11 : (byte) 248;
             var backgroundColor = i == menuScreen.SelectedEntryIndex ? (byte) 238 : (byte) 0;
             PrintText(entry.Text, 1, y, color, backgroundColor, buffer);
             if (entry.SubText != null)
-                PrintText(entry.SubText, 2 + entry.Text.Length, y, 8, 0, buffer);
+                PrintText(entry.SubText, 2 + entry.Text.Length, y, 238, 0, buffer);
             y++;
         }
         y += 1;

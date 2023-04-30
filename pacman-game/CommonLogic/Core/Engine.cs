@@ -1,3 +1,4 @@
+using CommonLogic.Core.Menus;
 using CommonLogic.Game.Screens;
 
 namespace CommonLogic.Core;
@@ -8,6 +9,7 @@ public abstract class Engine
     public Dictionary<Type, List<IElementExtension>> Extensions = new();
     public GameWorld? World;
     public List<Screen> Screens = new();
+    public AudioSystem AudioSystem = new();
 
     protected Engine(InputProvider input)
     {
@@ -29,6 +31,7 @@ public abstract class Engine
     {
         Input.Sync();
         if (Screens.Count > 0) this.Screens[^1].Update(deltaTime);
+        else if (this.Input.IsReceived(InputProvider.Signal.Back)) OpenScreen(new IngameMenu(this));
         else this.World?.Update(deltaTime);
     }
     
@@ -40,6 +43,11 @@ public abstract class Engine
     public void CloseActiveScreen()
     {
         this.Screens.RemoveAt(this.Screens.Count - 1);
+    }
+    
+    public void CloseAllScreens()
+    {
+        this.Screens.Clear();
     }
 
     protected void ShowTimedSplashScreen(SplashScreen.Type type, float seconds, Action? then = null)
@@ -60,21 +68,7 @@ public abstract class Engine
     {
         this.World = null;
         this.Screens.Clear();
-        OpenScreen(new MenuScreen(this, "Main Menu", new []
-        {
-            new MenuScreen.Entry("Start Game", (screen) =>
-            {
-                var level = File.ReadAllText("Levels/lvl1.txt");
-                var world = MapLoader.LoadMap(this, level);
-                this.World = world;
-                CloseActiveScreen();
-            }),
-            new MenuScreen.Entry("Exit", (screen) =>
-            {
-                Console.ResetColor();
-                Environment.Exit(0); // TODO: Implement proper exit
-            })
-        }));
+        OpenScreen(new MainMenu(this));
     }
     
     public void GameOver(int score, bool win)
@@ -84,7 +78,7 @@ public abstract class Engine
         this.OpenScreen(new DialogScreen(
             this,
             win ? DialogScreen.Type.YouWin : DialogScreen.Type.GameOver, 
-            win ? $"You win!\nYour score: {score}" : $"Game Over!\nYour score: {score}",
+            win ? $"Game Over!\nYour score: {score}" : $"You win!\nYour score: {score}",
             new[]
         {
             new DialogScreen.Button("Ok", (screen) =>

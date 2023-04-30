@@ -12,26 +12,35 @@ public abstract class InputProvider : IDisposable
         Back,
     }
 
-    private Object rebindLock = new();
-    private Signal? awaitingRebind;
+    private Object _rebindLock = new();
+    private Signal? _awaitingRebind;
 
     public void Rebind(Signal signal)
     {
-        lock (rebindLock)
+        lock (_rebindLock)
         {
-            awaitingRebind = signal;
+            _awaitingRebind = signal;
         }
     }
 
     public Signal? GetAwaitingRebind()
     {
-        lock (rebindLock)
+        lock (_rebindLock)
         {
-            return awaitingRebind;
+            return _awaitingRebind;
+        }
+    }
+    
+    protected void ResetRebinding()
+    {
+        lock (_rebindLock)
+        {
+            _awaitingRebind = null;
         }
     }
     
     public abstract void Sync();
     public abstract bool IsReceived(Signal signal);
     public abstract void Dispose();
+    public abstract String GetSignalBindingAsString(Signal signal);
 }

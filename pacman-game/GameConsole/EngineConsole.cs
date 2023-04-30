@@ -102,10 +102,16 @@ public class EngineConsole : Engine
         if (Screens.Count > 0)
         {
             var screen = Screens[^1];
-            if (_screenRenderers.ContainsKey(screen.GetType()))
+            IScreenRenderer? screenRenderer;
+            if (!_screenRenderers.TryGetValue(screen.GetType(), out screenRenderer))
             {
-                _screenRenderers[screen.GetType()].Render(screen, new Vec2(windowWidth, windowHeight), buffer);
+                var baseType = screen.GetType().BaseType;
+                while (baseType != null && !_screenRenderers.TryGetValue(baseType, out screenRenderer))
+                {
+                    baseType = baseType.BaseType;
+                }
             }
+            screenRenderer?.Render(screen, new Vec2(windowWidth, windowHeight), buffer);
         }
 
         var strBuff = new string[windowHeight];
@@ -167,10 +173,9 @@ public class EngineConsole : Engine
         {
             Console.SetCursorPosition(0, i);
             Console.Write(strBuff[i]);
-            Console.Out.Flush();
         }
     }
-
+    
     public override void Update(float deltaTime)
     {
         base.Update(deltaTime);

@@ -78,7 +78,7 @@ public class GameWorld: IDisposable
     public bool CheckVictory()
     {
         foreach (var entity in Entities)
-            if (entity is Energizer or Coin) return false;
+            if ((entity is Energizer or Coin) && !_entitiesToRemove.Contains(entity)) return false;
         
         return true;
     }

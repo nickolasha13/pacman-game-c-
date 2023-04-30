@@ -25,6 +25,11 @@ public class ConsoleKeybindings
         return null;
     }
     
+    public ConsoleKey Get(InputProvider.Signal signal)
+    {
+        return _bindings[signal];
+    }
+    
     public void Rebind(InputProvider.Signal signal, ConsoleKey key)
     {
         _bindings[signal] = key;
