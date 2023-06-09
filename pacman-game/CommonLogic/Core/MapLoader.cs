@@ -1,6 +1,7 @@
 using CommonLogic.Game.Elements.Entity;
 using CommonLogic.Game.Elements.Entity.Ghosts;
 using CommonLogic.Game.Elements.Map;
+using CommonLogic.Game.Routines;
 
 namespace CommonLogic.Core;
 
@@ -67,7 +68,9 @@ public class MapLoader
             }
         }
 
-        return new GameWorld(map, pacman!, ghosts[0], ghosts[1], ghosts[2], ghosts[3], entities);
+        var gw = new GameWorld(map, pacman!, ghosts[0], ghosts[1], ghosts[2], ghosts[3], entities);
+        gw.Routines.Add(new FruitSpawnRoutine(engine));
+        return gw;
     }
 
     private static Dictionary<string, string> parseMetadata(string data)

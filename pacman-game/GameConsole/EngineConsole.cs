@@ -14,6 +14,7 @@ public class EngineConsole : Engine
     {
         RegisterExtension(new RenderWall());
         RegisterExtension(new RenderFloor());
+        RegisterExtension(new RenderFruit());
         RegisterExtension(new RenderPacman());
         RegisterExtension(new RenderCoin());
         RegisterExtension(new RenderEnergizer());

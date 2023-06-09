@@ -6,6 +6,7 @@ public class GameWorld: IDisposable
 {
     public MapElement[,] Map;
     public List<EntityElement> Entities;
+    public List<Routine> Routines = new();
 
     public Pacman Pacman;
     public Ghost[] Ghosts;
@@ -48,6 +49,11 @@ public class GameWorld: IDisposable
         if (IsGhostsFrightened) GhostsFrightenedTime -= Math.Min(deltaTime, GhostsFrightenedTime);
         
         _isUpdating = true;
+        foreach (var routine in Routines)
+        {
+            routine.Update(deltaTime);
+            if (_disposed) return;
+        }
         foreach (var entity in Entities)
         {
             entity.Update(deltaTime);

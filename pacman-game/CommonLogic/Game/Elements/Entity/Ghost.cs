@@ -96,10 +96,14 @@ public abstract class Ghost : EntityElement
     private Direction[] GetAvailableDirections(Vec2 pos)
     {
         var directions = new List<Direction>();
-        if (!IsWall(pos.Translate(Direction.Up, 1).WrapBy(Engine.World!.Dimensions))) directions.Add(Direction.Up);
-        if (!IsWall(pos.Translate(Direction.Left, 1).WrapBy(Engine.World!.Dimensions))) directions.Add(Direction.Left);
-        if (!IsWall(pos.Translate(Direction.Down, 1).WrapBy(Engine.World!.Dimensions))) directions.Add(Direction.Down);
-        if (!IsWall(pos.Translate(Direction.Right, 1).WrapBy(Engine.World!.Dimensions))) directions.Add(Direction.Right);
+        if (!IsWall(pos.Translate(Direction.Up, 1).WrapBy(Engine.World!.Dimensions))) 
+            directions.Add(Direction.Up);
+        if (!IsWall(pos.Translate(Direction.Left, 1).WrapBy(Engine.World!.Dimensions))) 
+            directions.Add(Direction.Left);
+        if (!IsWall(pos.Translate(Direction.Down, 1).WrapBy(Engine.World!.Dimensions))) 
+            directions.Add(Direction.Down);
+        if (!IsWall(pos.Translate(Direction.Right, 1).WrapBy(Engine.World!.Dimensions))) 
+            directions.Add(Direction.Right);
         if (IsTurnsClockwise) directions.Reverse();
         return directions.ToArray();
     }

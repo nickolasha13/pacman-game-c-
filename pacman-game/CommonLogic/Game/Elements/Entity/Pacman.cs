@@ -10,7 +10,7 @@ public class Pacman : EntityElement
         this.Position = position;
     }
     
-    protected Vec2 InitialPosition;
+    public Vec2 InitialPosition;
     public Direction Direction = Direction.Right;
     private Direction _nextDirection = Direction.Right;
 
