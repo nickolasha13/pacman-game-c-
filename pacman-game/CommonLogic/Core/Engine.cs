@@ -31,7 +31,8 @@ public abstract class Engine
     {
         Input.Sync();
         if (Screens.Count > 0) this.Screens[^1].Update(deltaTime);
-        else if (this.Input.IsReceived(InputProvider.Signal.Back)) OpenScreen(new IngameMenu(this));
+        else if (this.Input.IsReceived(InputProvider.Signal.Back)) 
+            OpenScreen(new IngameMenu(this));
         else this.World?.Update(deltaTime);
     }
     

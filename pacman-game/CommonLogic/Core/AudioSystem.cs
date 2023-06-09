@@ -8,7 +8,7 @@ public class AudioSystem
     public bool AudioEnabled = true;
     public AudioSystem()
     {
-        var files = Directory.GetFiles("Audio");
+        var files = Directory.GetFiles("Assets/Audio");
         for (var i = 0; i < files.Length; i++)
         {
             var file = files[i];

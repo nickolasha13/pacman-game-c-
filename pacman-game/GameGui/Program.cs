@@ -8,6 +8,9 @@ var initialSize = new Vec2(800, 600);
 var vm = new VideoMode((uint)initialSize.X, (uint)initialSize.Y);
 var window = new RenderWindow(vm, "Pacman", Styles.Default);
 
+var icon = Resources.Texture("icon");
+window.SetIcon(icon.Size.X, icon.Size.Y, icon.CopyToImage().Pixels);
+
 window.SetVerticalSyncEnabled(true);
 window.Closed += (sender, args) => window.Close();
 window.Resized += (sender, args) =>
