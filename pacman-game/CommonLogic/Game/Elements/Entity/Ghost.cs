@@ -68,19 +68,22 @@ public abstract class Ghost : EntityElement
         }
         
         var multiplier = 1f;
-        if (this.Engine.World!.IsGhostsFrightened) multiplier = 1.5f;
+        if (this.Engine.World!.IsGhostsFrightened) 
+            multiplier = 1.5f;
         this._time += deltaTime;
-        if (this._time < this._timeToMove * multiplier) return;
+        if (this._time < this._timeToMove * multiplier) 
+            return;
         this._time -= this._timeToMove * multiplier;
         
         if (this.Position.Equals(this._checkPoint))
         {
             if (!this.Engine.World!.IsGhostsFrightened) UpdateTarget();
-            this._checkPoint = GetNextCheckpoint();
+            this._checkPoint = GetNextMovementPoint();
         }
 
-        var nextPosition = this.Position.Translate(this.Direction, 1).WrapBy(Engine.World!.Dimensions);
-        if (IsWall(nextPosition)) return;
+        var nextPosition = this.Position.TranslateWrapped(this.Direction, 1, Engine.World!.Dimensions);
+        if (IsWall(nextPosition)) 
+            return;
         this.Position = nextPosition;
     }
 
@@ -96,14 +99,11 @@ public abstract class Ghost : EntityElement
     private Direction[] GetAvailableDirections(Vec2 pos)
     {
         var directions = new List<Direction>();
-        if (!IsWall(pos.Translate(Direction.Up, 1).WrapBy(Engine.World!.Dimensions))) 
-            directions.Add(Direction.Up);
-        if (!IsWall(pos.Translate(Direction.Left, 1).WrapBy(Engine.World!.Dimensions))) 
-            directions.Add(Direction.Left);
-        if (!IsWall(pos.Translate(Direction.Down, 1).WrapBy(Engine.World!.Dimensions))) 
-            directions.Add(Direction.Down);
-        if (!IsWall(pos.Translate(Direction.Right, 1).WrapBy(Engine.World!.Dimensions))) 
-            directions.Add(Direction.Right);
+        foreach (var direction in Enum.GetValues<Direction>())
+        {
+            if (!IsWall(pos.TranslateWrapped(direction, 1, Engine.World!.Dimensions))) 
+                directions.Add(direction);
+        }
         if (IsTurnsClockwise) directions.Reverse();
         return directions.ToArray();
     }
@@ -134,22 +134,24 @@ public abstract class Ghost : EntityElement
     protected Vec2 RaycastToDecisionPoint(Direction direction, Vec2 from)
     {
         var position = from;
-        var first = true;
         while (true)
         {
             var prevPosition = position;
-            position = position.Translate(direction, 1).WrapBy(Engine.World!.Dimensions);
-            if (IsWall(position)) return prevPosition;
-            if (!first && GetAvailableDirections(position).Length > 2) return position;
-            if (!first && from.Equals(position)) return position;
-            first = false;
+            position = position.TranslateWrapped(direction, 1, Engine.World!.Dimensions);
+            if (IsWall(position)) 
+                return prevPosition;
+            if (GetAvailableDirections(position).Length > 2) 
+                return position;
+            if (from.Equals(position)) 
+                return position;
         }
     }
 
-    private Vec2 GetNextCheckpoint()
+    private Vec2 GetNextMovementPoint()
     {
         var directions = GetAvailableDirections(this.Position);
-        if (directions.Length == 1) return RaycastToDecisionPoint(directions[0], this.Position);
+        if (directions.Length == 1) 
+            return RaycastToDecisionPoint(directions[0], this.Position);
 
         var lastDirectionIndex = Array.IndexOf(directions, this.Direction);
         if (lastDirectionIndex != -1)

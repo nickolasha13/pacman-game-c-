@@ -6,7 +6,7 @@ namespace CommonLogic.Core;
 public abstract class Engine
 {
     public InputProvider Input;
-    public Dictionary<Type, List<IElementExtension>> Extensions = new();
+    public Dictionary<Type, IRenderExtension> Extensions = new();
     public GameWorld? World;
     public List<Screen> Screens = new();
     public AudioSystem AudioSystem = new();
@@ -16,14 +16,12 @@ public abstract class Engine
         this.Input = input;
         ShowTimedSplashScreen(SplashScreen.Type.Intro, 1, ExitToMainMenu);
     }
-    
-    public void RegisterExtension(IElementExtension extension)
+
+    protected void RegisterExtension(IRenderExtension extension)
     {
         foreach (var type in extension.ElementTypes())
         {
-            if (!Extensions.ContainsKey(type))
-                Extensions.Add(type, new List<IElementExtension>());
-            Extensions[type].Add(extension);
+            Extensions[type] = extension;
         }
     }
     

@@ -7,6 +7,20 @@ namespace CommonLogic.Core;
 
 public class MapLoader
 {
+    private static Dictionary<char, Func<Engine, Vec2, List<Element>>> _elementConstructors = new();
+
+    static MapLoader()
+    {
+        _elementConstructors.Add(' ', (e, _) => new List<Element> { new Floor(e) });
+        _elementConstructors.Add('#', (e, _) => new List<Element> { new Wall(e) });
+        _elementConstructors.Add('·', (e, p) => new List<Element> { new Coin(e, p), new Floor(e) });
+        _elementConstructors.Add('+', (e, p) => new List<Element> { new Energizer(e, p), new Floor(e) });
+        _elementConstructors.Add('@', (e, p) => new List<Element> { new Pacman(e, p), new Floor(e) });
+        _elementConstructors.Add('A', (e, p) => new List<Element> { new Blinky(e, p), new Floor(e) });
+        _elementConstructors.Add('B', (e, p) => new List<Element> { new Pinky(e, p), new Floor(e) });
+        _elementConstructors.Add('C', (e, p) => new List<Element> { new Inky(e, p), new Floor(e) });
+        _elementConstructors.Add('D', (e, p) => new List<Element> { new Clyde(e, p), new Floor(e) });
+    }
     public static GameWorld LoadMap(Engine engine, string data)
     {
         var lines = data.ReplaceLineEndings().Split('\n');
@@ -26,44 +40,26 @@ public class MapLoader
             for (var x = 0; x < width; x++)
             {
                 var c = line[x];
-                switch (c)
+                if (!_elementConstructors.ContainsKey(c)) 
+                    continue;
+                foreach (var element in _elementConstructors[c](engine, new Vec2(x, y)))
                 {
-                    case ' ':
-                        map[y, x] = new Floor(engine);
-                        break;
-                    case '#':
-                        map[y, x] = new Wall(engine);
-                        break;
-                    case '·':
-                        entities.Add(new Coin(engine, new Vec2(x, y)));
-                        map[y, x] = new Floor(engine);
-                        break;
-                    case '+':
-                        entities.Add(new Energizer(engine, new Vec2(x, y)));
-                        map[y, x] = new Floor(engine);
-                        break;
-                    case '@':
-                        pacman = new Pacman(engine, new Vec2(x, y));
-                        map[y, x] = new Floor(engine);
-                        break;
-                    case 'A':
-                        ghosts[0] = new Blinky(engine, new Vec2(x, y));
-                        map[y, x] = new Floor(engine);
-                        break;
-                    case 'B':
-                        ghosts[1] = new Pinky(engine, new Vec2(x, y));
-                        map[y, x] = new Floor(engine);
-                        break;
-                    case 'C':
-                        ghosts[2] = new Inky(engine, new Vec2(x, y));
-                        map[y, x] = new Floor(engine);
-                        break;
-                    case 'D':
-                        ghosts[3] = new Clyde(engine, new Vec2(x, y));
-                        map[y, x] = new Floor(engine);
-                        break;
-                    default:
-                        throw new Exception("Invalid character in map: '" + c + "'");
+                    if (element is Pacman p)
+                        pacman = p;
+                    else if (element is Blinky g1)
+                        ghosts[0] = g1;
+                    else if (element is Pinky g2)
+                        ghosts[1] = g2;
+                    else if (element is Inky g3)
+                        ghosts[2] = g3;
+                    else if (element is Clyde g4)
+                        ghosts[3] = g4;
+                    else if (element is EntityElement entity)
+                        entities.Add(entity);
+                    else if (element is MapElement tile)
+                        map[y, x] = tile;
+                    else
+                        throw new Exception("Invalid element type: " + element.GetType().Name);
                 }
             }
         }

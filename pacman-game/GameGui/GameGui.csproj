@@ -8,11 +8,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\CommonLogic\CommonLogic.csproj" />
+        <ProjectReference Include="..\CommonLogic\CommonLogic.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="SFML.Net" Version="2.5.0" />
+        <PackageReference Include="SFML.Net" Version="2.5.0"/>
     </ItemGroup>
 
 </Project>

@@ -15,11 +15,11 @@ public class FruitSpawnRoutine : Routine
 
     public override void Update(float deltaTime)
     {
-        if (_spawned) return;
+        if (_spawned) 
+            return;
         if (_timePassed < _spawnTime)
         {
             _timePassed += deltaTime;
-            return;
         }
         else
         {

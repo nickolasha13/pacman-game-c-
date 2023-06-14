@@ -5,10 +5,11 @@
         <TargetFramework>net7.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <RootNamespace>GamexConsole</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\CommonLogic\CommonLogic.csproj" />
+        <ProjectReference Include="..\CommonLogic\CommonLogic.csproj" />
     </ItemGroup>
 
 </Project>

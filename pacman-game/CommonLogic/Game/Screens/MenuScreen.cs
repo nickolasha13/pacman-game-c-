@@ -32,14 +32,25 @@ public abstract class MenuScreen : Screen
     protected MenuScreen(Engine engine) : base(engine)
     {
     }
-
+//1. Update сократить в MenuScreen, плюс с % от отриц. поиграться
+    private bool IsUp()
+    {
+        var isReceived = this.Engine.Input.IsReceived(InputProvider.Signal.Up) ||
+                         this.Engine.Input.IsReceived(InputProvider.Signal.Left);
+        return isReceived;
+    }
+    
+    private bool IsDown()
+    {
+        var isReceived = this.Engine.Input.IsReceived(InputProvider.Signal.Down) ||
+                         this.Engine.Input.IsReceived(InputProvider.Signal.Right);
+        return isReceived;
+    }
     public override void Update(float deltaTime)
     {
-        if (this.Engine.Input.IsReceived(InputProvider.Signal.Up) ||
-            this.Engine.Input.IsReceived(InputProvider.Signal.Left))
+        if (IsUp())
             this.SelectedEntryIndex = (this.SelectedEntryIndex + this.Entries!.Length - 1) % this.Entries.Length;
-        if (this.Engine.Input.IsReceived(InputProvider.Signal.Down) ||
-            this.Engine.Input.IsReceived(InputProvider.Signal.Right))
+        if (IsDown())
             this.SelectedEntryIndex = (this.SelectedEntryIndex + 1) % this.Entries!.Length;
         if (this.Engine.Input.IsReceived(InputProvider.Signal.Confirm))
             this.Entries![this.SelectedEntryIndex].OnClick(this, ref this.Entries[this.SelectedEntryIndex]);

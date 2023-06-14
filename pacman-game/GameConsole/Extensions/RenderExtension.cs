@@ -2,7 +2,7 @@ using CommonLogic.Core;
 
 namespace GameConsole.Extensions;
 
-public abstract class RenderExtension<TElement> : IElementExtension, IRenderExtension where TElement : Element
+public abstract class RenderExtension<TElement> : CommonLogic.Core.IRenderExtension, IRenderExtension where TElement : Element
 {
     public virtual Type[] ElementTypes() => new[] { typeof(TElement) };
 

@@ -52,12 +52,14 @@ public class GameWorld: IDisposable
         foreach (var routine in Routines)
         {
             routine.Update(deltaTime);
-            if (_disposed) return;
+            if (_disposed) 
+                return;
         }
         foreach (var entity in Entities)
         {
             entity.Update(deltaTime);
-            if (_disposed) return;
+            if (_disposed) 
+                return;
         }
 
         _isUpdating = false;
@@ -72,7 +74,8 @@ public class GameWorld: IDisposable
 
     public void RemoveEntity(EntityElement entity)
     {
-        if (_isUpdating) _entitiesToRemove.Add(entity);
+        if (_isUpdating) 
+            _entitiesToRemove.Add(entity);
         else PerformEntityRemoval(entity);
     }
 
@@ -84,8 +87,8 @@ public class GameWorld: IDisposable
     public bool CheckVictory()
     {
         foreach (var entity in Entities)
-            if ((entity is Energizer or Coin) && !_entitiesToRemove.Contains(entity)) return false;
-        
+            if ((entity is Energizer or Coin) && !_entitiesToRemove.Contains(entity)) 
+                return false;
         return true;
     }
     

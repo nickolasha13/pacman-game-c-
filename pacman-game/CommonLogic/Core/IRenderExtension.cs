@@ -1,6 +1,6 @@
 namespace CommonLogic.Core;
 
-public interface IElementExtension
+public interface IRenderExtension
 {
     public Type[] ElementTypes();
 }
