@@ -9,11 +9,11 @@ namespace GameConsole;
 
 public class EngineConsole : Engine
 {
+    private readonly Dictionary<Type, IScreenRenderer> _screenRenderers = new();
     private int _fps;
 
     private int _fpsCounter;
     private float _fpsTimer;
-    private readonly Dictionary<Type, IScreenRenderer> _screenRenderers = new();
 
     public EngineConsole(ConsoleKeybindings keybindings) : base(new ConsoleInputProvider(keybindings))
     {

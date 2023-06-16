@@ -1,15 +1,14 @@
 using System.Collections.Concurrent;
 using CommonLogic.Core;
-using GameGui;
 using SFML.Window;
 
 namespace GameGui;
 
 public class GuiInputProvider : InputProvider
 {
-    private ConcurrentQueue<Signal> signals = new();
-    private GuiKeybindings keybindings;
-    private HashSet<Signal> received = new();
+    private readonly GuiKeybindings keybindings;
+    private readonly HashSet<Signal> received = new();
+    private readonly ConcurrentQueue<Signal> signals = new();
 
     public GuiInputProvider(GuiKeybindings keybindings)
     {
@@ -21,11 +20,13 @@ public class GuiInputProvider : InputProvider
         var awaitingRebind = GetAwaitingRebind();
         if (awaitingRebind != null)
         {
-            if (keybindings.IsUsed(key) && keybindings.Get(awaitingRebind.Value) != key) return;
+            if (keybindings.IsUsed(key) && keybindings.Get(awaitingRebind.Value) != key)
+                return;
             keybindings.Rebind(awaitingRebind.Value, key);
             ResetRebinding();
             return;
         }
+
         var signal = keybindings.Get(key);
         if (signal != null)
             signals.Enqueue(signal.Value);

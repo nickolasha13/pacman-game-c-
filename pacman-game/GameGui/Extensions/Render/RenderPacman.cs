@@ -3,7 +3,7 @@ using SFML.Graphics;
 
 namespace GameGui.Extensions.Render;
 
-public class RenderPacman: RenderExtension<Pacman>
+public class RenderPacman : RenderExtension<Pacman>
 {
     protected override Texture RenderElement(Pacman element, EngineGui engine, float deltaTime, int x, int y)
     {

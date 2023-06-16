@@ -7,7 +7,7 @@ namespace CommonLogic.Core;
 
 public class MapLoader
 {
-    private static Dictionary<char, Func<Engine, Vec2, List<Element>>> _elementConstructors = new();
+    private static readonly Dictionary<char, Func<Engine, Vec2, List<Element>>> _elementConstructors = new();
 
     static MapLoader()
     {
@@ -21,6 +21,7 @@ public class MapLoader
         _elementConstructors.Add('C', (e, p) => new List<Element> { new Inky(e, p), new Floor(e) });
         _elementConstructors.Add('D', (e, p) => new List<Element> { new Clyde(e, p), new Floor(e) });
     }
+
     public static GameWorld LoadMap(Engine engine, string data)
     {
         var lines = data.ReplaceLineEndings().Split('\n');
@@ -40,10 +41,9 @@ public class MapLoader
             for (var x = 0; x < width; x++)
             {
                 var c = line[x];
-                if (!_elementConstructors.ContainsKey(c)) 
+                if (!_elementConstructors.ContainsKey(c))
                     continue;
                 foreach (var element in _elementConstructors[c](engine, new Vec2(x, y)))
-                {
                     if (element is Pacman p)
                         pacman = p;
                     else if (element is Blinky g1)
@@ -60,7 +60,6 @@ public class MapLoader
                         map[y, x] = tile;
                     else
                         throw new Exception("Invalid element type: " + element.GetType().Name);
-                }
             }
         }
 
@@ -78,6 +77,7 @@ public class MapLoader
             var split = pair.Split('=');
             dict.Add(split[0], split[1]);
         }
+
         return dict;
     }
 }

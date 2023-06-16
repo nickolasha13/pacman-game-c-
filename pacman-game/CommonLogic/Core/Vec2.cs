@@ -4,14 +4,14 @@ public struct Vec2 : IEquatable<Vec2>
 {
     public int X;
     public int Y;
-    
+
     public Vec2(int x, int y)
     {
         X = x;
         Y = y;
     }
-    
-    private static Dictionary<Direction, Func<Vec2, int, Vec2>> _translate = new();
+
+    private static readonly Dictionary<Direction, Func<Vec2, int, Vec2>> _translate = new();
 
     static Vec2()
     {
@@ -20,6 +20,7 @@ public struct Vec2 : IEquatable<Vec2>
         _translate.Add(Direction.Left, (vec, distance) => new Vec2(vec.X - distance, vec.Y));
         _translate.Add(Direction.Right, (vec, distance) => new Vec2(vec.X + distance, vec.Y));
     }
+
     public Vec2 Translate(Direction direction, int distance)
     {
         return _translate[direction](this, distance);
@@ -42,7 +43,7 @@ public struct Vec2 : IEquatable<Vec2>
             return this;
         return newPos.WrapBy(dimensions);
     }
-    
+
     public Vec2 TranslateWrapped(Direction direction, int distance, Vec2 dimensions)
     {
         return Translate(direction, distance).WrapBy(dimensions);

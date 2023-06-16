@@ -5,8 +5,8 @@ namespace GameGui;
 
 public class GuiKeybindings
 {
-    private Dictionary<InputProvider.Signal, Keyboard.Key> _bindings = new();
-    
+    private readonly Dictionary<InputProvider.Signal, Keyboard.Key> _bindings = new();
+
     public GuiKeybindings()
     {
         _bindings.Add(InputProvider.Signal.Up, Keyboard.Key.Up);
@@ -25,17 +25,17 @@ public class GuiKeybindings
 
         return null;
     }
-    
+
     public Keyboard.Key Get(InputProvider.Signal signal)
     {
         return _bindings[signal];
     }
-    
+
     public void Rebind(InputProvider.Signal signal, Keyboard.Key key)
     {
         _bindings[signal] = key;
     }
-    
+
     public bool IsUsed(Keyboard.Key key)
     {
         return _bindings.ContainsValue(key);

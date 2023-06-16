@@ -21,45 +21,30 @@ window.Resized += (sender, args) =>
 
 var input = new GuiInputProvider(new GuiKeybindings());
 
-window.KeyPressed += (sender, args) =>
-{
-    input.SubmitKey(args.Code);
-};
+window.KeyPressed += (sender, args) => { input.SubmitKey(args.Code); };
 window.JoystickMoved += (sender, args) =>
 {
     if (args.Axis == Joystick.Axis.PovX)
     {
         if (args.Position <= -1)
-        {
             input.SubmitKey(Keyboard.Key.Left);
-        }
         else if (args.Position >= 1)
-        {
             input.SubmitKey(Keyboard.Key.Right);
-        }
     }
     else if (args.Axis == Joystick.Axis.PovY)
     {
         if (args.Position <= -1)
-        {
             input.SubmitKey(Keyboard.Key.Up);
-        }
         else if (args.Position >= 1)
-        {
             input.SubmitKey(Keyboard.Key.Down);
-        }
     }
 };
 window.JoystickButtonPressed += (sender, args) =>
 {
     if (args.Button == 0)
-    {
         input.SubmitKey(Keyboard.Key.Enter);
-    }
     else if (args.Button == 1)
-    {
         input.SubmitKey(Keyboard.Key.Escape);
-    }
 };
 
 var engine = new EngineGui(window, input);
@@ -69,11 +54,11 @@ while (window.IsOpen)
 {
     window.DispatchEvents();
     window.Clear(Color.Black);
-    
+
     var now = DateTime.Now;
     var deltaTime = (float)(now - lastTime).TotalSeconds;
     engine.Update(deltaTime);
     lastTime = now;
-    
+
     window.Display();
 }

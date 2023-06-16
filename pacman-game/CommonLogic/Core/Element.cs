@@ -6,6 +6,6 @@ public abstract class Element
 
     protected Element(Engine engine)
     {
-        this.Engine = engine;
+        Engine = engine;
     }
 }

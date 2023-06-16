@@ -9,17 +9,18 @@ public class SplashScreen : Screen
         Intro
     }
 
+    private readonly Action<SplashScreen, float> _onUpdate;
+
     public Type SplashType;
-    private Action<SplashScreen, float> _onUpdate;
 
     public SplashScreen(Engine engine, Type splashType, Action<SplashScreen, float> onUpdate) : base(engine)
     {
-        this.SplashType = splashType;
-        this._onUpdate = onUpdate;
+        SplashType = splashType;
+        _onUpdate = onUpdate;
     }
 
     public override void Update(float deltaTime)
     {
-        this._onUpdate(this, deltaTime);
+        _onUpdate(this, deltaTime);
     }
 }

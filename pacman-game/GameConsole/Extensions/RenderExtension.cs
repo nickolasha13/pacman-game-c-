@@ -2,16 +2,20 @@ using CommonLogic.Core;
 
 namespace GameConsole.Extensions;
 
-public abstract class RenderExtension<TElement> : CommonLogic.Core.IRenderExtension, IRenderExtension where TElement : Element
+public abstract class RenderExtension<TElement> : CommonLogic.Core.IRenderExtension, IRenderExtension
+    where TElement : Element
 {
-    public virtual Type[] ElementTypes() => new[] { typeof(TElement) };
-
-    protected abstract Symbol[] RenderElement(TElement element, EngineConsole engine, float deltaTime, int x, int y);
+    public virtual Type[] ElementTypes()
+    {
+        return new[] { typeof(TElement) };
+    }
 
     public Symbol[] RenderElement(Element element, EngineConsole engine, float deltaTime, int x, int y)
     {
         return RenderElement((TElement)element, engine, deltaTime, x, y);
     }
+
+    protected abstract Symbol[] RenderElement(TElement element, EngineConsole engine, float deltaTime, int x, int y);
 }
 
 public struct Symbol

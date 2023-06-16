@@ -5,6 +5,31 @@ namespace CommonLogic.Game.Screens;
 public abstract class MenuScreen : Screen
 {
     public delegate void EntryEvent(MenuScreen screen, ref Entry entry);
+
+    public Action<MenuScreen>? BackAction;
+    public Entry[]? Entries;
+    public int SelectedEntryIndex;
+
+    public string? Title;
+
+    protected MenuScreen(Engine engine) : base(engine)
+    {
+    }
+
+    public override void Update(float deltaTime)
+    {
+        if (IsUp())
+            SelectedEntryIndex = (SelectedEntryIndex + Entries!.Length - 1) % Entries.Length;
+        if (IsDown())
+            SelectedEntryIndex = (SelectedEntryIndex + 1) % Entries!.Length;
+        if (Engine.Input.IsReceived(InputProvider.Signal.Confirm))
+            Entries![SelectedEntryIndex].OnClick(this, ref Entries[SelectedEntryIndex]);
+        if (Engine.Input.IsReceived(InputProvider.Signal.Back))
+            BackAction?.Invoke(this);
+        for (var i = 0; i < Entries!.Length; i++)
+            Entries[i].OnUpdate?.Invoke(this, ref Entries[i]);
+    }
+
     public struct Entry
     {
         public string Text;
@@ -16,47 +41,11 @@ public abstract class MenuScreen : Screen
         public Entry(string text, EntryEvent onClick, EntryEvent? onUpdate = null,
             string? subText = null, string? description = null)
         {
-            this.Text = text;
-            this.OnClick = onClick;
-            this.OnUpdate = onUpdate;
-            this.SubText = subText;
-            this.Description = description;
+            Text = text;
+            OnClick = onClick;
+            OnUpdate = onUpdate;
+            SubText = subText;
+            Description = description;
         }
-    }
-
-    public string? Title;
-    public Action<MenuScreen>? BackAction;
-    public Entry[]? Entries;
-    public int SelectedEntryIndex = 0;
-
-    protected MenuScreen(Engine engine) : base(engine)
-    {
-    }
-//1. Update сократить в MenuScreen, плюс с % от отриц. поиграться
-    private bool IsUp()
-    {
-        var isReceived = this.Engine.Input.IsReceived(InputProvider.Signal.Up) ||
-                         this.Engine.Input.IsReceived(InputProvider.Signal.Left);
-        return isReceived;
-    }
-    
-    private bool IsDown()
-    {
-        var isReceived = this.Engine.Input.IsReceived(InputProvider.Signal.Down) ||
-                         this.Engine.Input.IsReceived(InputProvider.Signal.Right);
-        return isReceived;
-    }
-    public override void Update(float deltaTime)
-    {
-        if (IsUp())
-            this.SelectedEntryIndex = (this.SelectedEntryIndex + this.Entries!.Length - 1) % this.Entries.Length;
-        if (IsDown())
-            this.SelectedEntryIndex = (this.SelectedEntryIndex + 1) % this.Entries!.Length;
-        if (this.Engine.Input.IsReceived(InputProvider.Signal.Confirm))
-            this.Entries![this.SelectedEntryIndex].OnClick(this, ref this.Entries[this.SelectedEntryIndex]);
-        if (this.Engine.Input.IsReceived(InputProvider.Signal.Back))
-            this.BackAction?.Invoke(this);
-        for (var i = 0; i < this.Entries!.Length; i++)
-            this.Entries[i].OnUpdate?.Invoke(this, ref this.Entries[i]);
     }
 }

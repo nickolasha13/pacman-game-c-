@@ -11,6 +11,6 @@ public abstract class EntityElement : Element
 
     public virtual void Update(float deltaTime)
     {
-        this.PreUpdatePosition = this.Position;
+        PreUpdatePosition = Position;
     }
 }

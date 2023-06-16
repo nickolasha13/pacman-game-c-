@@ -3,7 +3,7 @@ using SFML.Graphics;
 
 namespace GameGui.Extensions.Render;
 
-public class RenderFruit: RenderExtension<Fruit>
+public class RenderFruit : RenderExtension<Fruit>
 {
     protected override Texture RenderElement(Fruit element, EngineGui engine, float deltaTime, int x, int y)
     {

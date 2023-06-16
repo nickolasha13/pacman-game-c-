@@ -4,8 +4,8 @@ namespace GameConsole;
 
 public class ConsoleKeybindings
 {
-    private Dictionary<InputProvider.Signal, ConsoleKey> _bindings = new();
-    
+    private readonly Dictionary<InputProvider.Signal, ConsoleKey> _bindings = new();
+
     public ConsoleKeybindings()
     {
         _bindings.Add(InputProvider.Signal.Up, ConsoleKey.UpArrow);
@@ -24,17 +24,17 @@ public class ConsoleKeybindings
 
         return null;
     }
-    
+
     public ConsoleKey Get(InputProvider.Signal signal)
     {
         return _bindings[signal];
     }
-    
+
     public void Rebind(InputProvider.Signal signal, ConsoleKey key)
     {
         _bindings[signal] = key;
     }
-    
+
     public bool IsUsed(ConsoleKey key)
     {
         return _bindings.ContainsValue(key);

@@ -5,17 +5,17 @@ namespace CommonLogic.Game.Routines;
 
 public class FruitSpawnRoutine : Routine
 {
-    float _spawnTime = 15;
-    float _timePassed = 0;
-    bool _spawned = false;
-    
+    private bool _spawned;
+    private readonly float _spawnTime = 15;
+    private float _timePassed;
+
     public FruitSpawnRoutine(Engine engine) : base(engine)
     {
     }
 
     public override void Update(float deltaTime)
     {
-        if (_spawned) 
+        if (_spawned)
             return;
         if (_timePassed < _spawnTime)
         {
@@ -23,7 +23,7 @@ public class FruitSpawnRoutine : Routine
         }
         else
         {
-            this.Engine.World!.AddEntity(new Fruit(this.Engine, this.Engine.World!.Pacman.InitialPosition));
+            Engine.World!.AddEntity(new Fruit(Engine, Engine.World!.Pacman.InitialPosition));
             _spawned = true;
         }
     }

@@ -6,15 +6,15 @@ public class SettingsMenu : MenuScreen
 {
     public SettingsMenu(Engine engine) : base(engine)
     {
-        this.Title = "Settings";
-        this.Entries = new[]
+        Title = "Settings";
+        Entries = new[]
         {
             new Entry("Audio",
                 (MenuScreen screen, ref Entry entry) =>
                 {
                     engine.AudioSystem.AudioEnabled = !engine.AudioSystem.AudioEnabled;
                 },
-                onUpdate: (MenuScreen screen, ref Entry entry) =>
+                (MenuScreen screen, ref Entry entry) =>
                 {
                     entry.SubText = engine.AudioSystem.AudioEnabled ? "On" : "Off";
                 },
@@ -25,6 +25,6 @@ public class SettingsMenu : MenuScreen
             new Entry("<- Back", (MenuScreen screen, ref Entry entry) => { engine.CloseActiveScreen(); },
                 description: "Return to main menu")
         };
-        this.BackAction = (screen) => { engine.CloseActiveScreen(); };
+        BackAction = screen => { engine.CloseActiveScreen(); };
     }
 }

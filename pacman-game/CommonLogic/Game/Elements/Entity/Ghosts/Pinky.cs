@@ -6,11 +6,11 @@ public class Pinky : Ghost
 {
     public Pinky(Engine engine, Vec2 position) : base(engine, position)
     {
-        this.IsTurnsClockwise = false;
+        IsTurnsClockwise = false;
     }
 
     protected override void UpdateTarget()
     {
-        this.Target = RaycastToDecisionPoint(this.Engine.World!.Pacman.Direction, this.Engine.World!.Pacman.Position);
+        Target = RaycastToDecisionPoint(Engine.World!.Pacman.Direction, Engine.World!.Pacman.Position);
     }
 }

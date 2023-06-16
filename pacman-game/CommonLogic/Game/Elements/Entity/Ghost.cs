@@ -4,60 +4,62 @@ namespace CommonLogic.Game.Elements.Entity;
 
 public abstract class Ghost : EntityElement
 {
+    private Vec2 _checkPoint;
+
+    private float _immobilizedTime = 3;
+
+    private float _time;
+    private readonly float _timeToMove = 0.2f;
+    protected Direction Direction = Direction.Right;
+
+    protected Vec2 InitialPosition;
+    protected bool IsReverse;
+    protected bool IsTurnsClockwise = false;
+    protected Vec2 Target;
+
     protected Ghost(Engine engine, Vec2 position) : base(engine)
     {
-        this.InitialPosition = position;
-        this.Position = position;
-        this.Target = this.Position;
-        this._checkPoint = this.Position;
+        InitialPosition = position;
+        Position = position;
+        Target = Position;
+        _checkPoint = Position;
     }
 
     public override void Update(float deltaTime)
     {
         base.Update(deltaTime);
-        this.IsReverse = this.Engine.World!.IsGhostsFrightened;
-        if (this.Engine.World.IsGhostsFrightened)
-            this.Target = this.Engine.World.Pacman.Position;
-        
-        this.Move(deltaTime);
-        
-        if (this.Position.Equals(this.Engine.World.Pacman.Position))
+        IsReverse = Engine.World!.IsGhostsFrightened;
+        if (Engine.World.IsGhostsFrightened)
+            Target = Engine.World.Pacman.Position;
+
+        Move(deltaTime);
+
+        if (Position.Equals(Engine.World.Pacman.Position))
         {
-            if (this.Engine.World.IsGhostsFrightened)
+            if (Engine.World.IsGhostsFrightened)
             {
-                this.RespawnWithImmobilization(3);
-                this.Engine.World.Score += 100;
-                this.Engine.AudioSystem.Play("pacman_eatghost");
+                RespawnWithImmobilization(3);
+                Engine.World.Score += 100;
+                Engine.AudioSystem.Play("pacman_eatghost");
             }
             else
             {
-                this.Engine.World.Pacman.RespawnWithImmobilization(3);
-                foreach (var ghost in this.Engine.World.Ghosts)
+                Engine.World.Pacman.RespawnWithImmobilization(3);
+                foreach (var ghost in Engine.World.Ghosts)
                     ghost.RespawnWithImmobilization(3);
-                this.Engine.World.Lives--;
-                if (this.Engine.World.Lives == 0)
+                Engine.World.Lives--;
+                if (Engine.World.Lives == 0)
                 {
-                    this.Engine.GameOver(this.Engine.World.Score, false);
+                    Engine.GameOver(Engine.World.Score, false);
                     return;
                 }
-                this.Engine.AudioSystem.Play("pacman_death");
+
+                Engine.AudioSystem.Play("pacman_death");
             }
         }
     }
 
-    protected Vec2 InitialPosition;
-    protected Vec2 Target;
-    private Vec2 _checkPoint;
-    protected Direction Direction = Direction.Right;
-    protected bool IsReverse = false;
-    protected bool IsTurnsClockwise = false;
-
     protected abstract void UpdateTarget();
-    
-    private float _time = 0;
-    private float _timeToMove = 0.2f;
-    
-    private float _immobilizedTime = 3;
 
     private void Move(float deltaTime)
     {
@@ -66,45 +68,45 @@ public abstract class Ghost : EntityElement
             _immobilizedTime -= Math.Min(deltaTime, _immobilizedTime);
             return;
         }
-        
+
         var multiplier = 1f;
-        if (this.Engine.World!.IsGhostsFrightened) 
+        if (Engine.World!.IsGhostsFrightened)
             multiplier = 1.5f;
-        this._time += deltaTime;
-        if (this._time < this._timeToMove * multiplier) 
+        _time += deltaTime;
+        if (_time < _timeToMove * multiplier)
             return;
-        this._time -= this._timeToMove * multiplier;
-        
-        if (this.Position.Equals(this._checkPoint))
+        _time -= _timeToMove * multiplier;
+
+        if (Position.Equals(_checkPoint))
         {
-            if (!this.Engine.World!.IsGhostsFrightened) UpdateTarget();
-            this._checkPoint = GetNextMovementPoint();
+            if (!Engine.World!.IsGhostsFrightened)
+                UpdateTarget();
+            _checkPoint = GetNextMovementPoint();
         }
 
-        var nextPosition = this.Position.TranslateWrapped(this.Direction, 1, Engine.World!.Dimensions);
-        if (IsWall(nextPosition)) 
+        var nextPosition = Position.TranslateWrapped(Direction, 1, Engine.World!.Dimensions);
+        if (IsWall(nextPosition))
             return;
-        this.Position = nextPosition;
+        Position = nextPosition;
     }
 
     public void RespawnWithImmobilization(float time)
     {
-        this.Position = this.InitialPosition;
-        this._immobilizedTime = time;
-        this.Target = this.Position;
-        this._checkPoint = this.Position;
-        this.Direction = Direction.Right;
+        Position = InitialPosition;
+        _immobilizedTime = time;
+        Target = Position;
+        _checkPoint = Position;
+        Direction = Direction.Right;
     }
-    
+
     private Direction[] GetAvailableDirections(Vec2 pos)
     {
         var directions = new List<Direction>();
         foreach (var direction in Enum.GetValues<Direction>())
-        {
-            if (!IsWall(pos.TranslateWrapped(direction, 1, Engine.World!.Dimensions))) 
+            if (!IsWall(pos.TranslateWrapped(direction, 1, Engine.World!.Dimensions)))
                 directions.Add(direction);
-        }
-        if (IsTurnsClockwise) directions.Reverse();
+        if (IsTurnsClockwise)
+            directions.Reverse();
         return directions.ToArray();
     }
 
@@ -114,20 +116,21 @@ public abstract class Ghost : EntityElement
         switch (direction)
         {
             case Direction.Left:
-                heat = this.Position.X - this.Target.X;
+                heat = Position.X - Target.X;
                 break;
             case Direction.Right:
-                heat = this.Target.X - this.Position.X;
+                heat = Target.X - Position.X;
                 break;
             case Direction.Up:
-                heat = this.Position.Y - this.Target.Y;
+                heat = Position.Y - Target.Y;
                 break;
             case Direction.Down:
-                heat = this.Target.Y - this.Position.Y;
+                heat = Target.Y - Position.Y;
                 break;
         }
 
-        if (IsReverse) heat *= -1;
+        if (IsReverse)
+            heat *= -1;
         return heat;
     }
 
@@ -138,52 +141,48 @@ public abstract class Ghost : EntityElement
         {
             var prevPosition = position;
             position = position.TranslateWrapped(direction, 1, Engine.World!.Dimensions);
-            if (IsWall(position)) 
+            if (IsWall(position))
                 return prevPosition;
-            if (GetAvailableDirections(position).Length > 2) 
+            if (GetAvailableDirections(position).Length > 2)
                 return position;
-            if (from.Equals(position)) 
+            if (from.Equals(position))
                 return position;
         }
     }
 
     private Vec2 GetNextMovementPoint()
     {
-        var directions = GetAvailableDirections(this.Position);
-        if (directions.Length == 1) 
-            return RaycastToDecisionPoint(directions[0], this.Position);
+        var directions = GetAvailableDirections(Position);
+        if (directions.Length == 1)
+            return RaycastToDecisionPoint(directions[0], Position);
 
-        var lastDirectionIndex = Array.IndexOf(directions, this.Direction);
+        var lastDirectionIndex = Array.IndexOf(directions, Direction);
         if (lastDirectionIndex != -1)
         {
             for (var i = lastDirectionIndex; i < directions.Length - 1; i++)
                 directions[i] = directions[i + 1];
-            directions[^1] = this.Direction;
+            directions[^1] = Direction;
         }
 
         foreach (var direction in directions)
-        {
-            if (GetDirectionHeat(direction) > 0 && direction != DirectionHelper.GetOpposite(this.Direction))
+            if (GetDirectionHeat(direction) > 0 && direction != DirectionHelper.GetOpposite(Direction))
             {
-                this.Direction = direction;
-                return RaycastToDecisionPoint(direction, this.Position);
+                Direction = direction;
+                return RaycastToDecisionPoint(direction, Position);
             }
-        }
 
         foreach (var direction in directions)
-        {
-            if (direction != DirectionHelper.GetOpposite(this.Direction))
+            if (direction != DirectionHelper.GetOpposite(Direction))
             {
-                this.Direction = direction;
-                return RaycastToDecisionPoint(direction, this.Position);
+                Direction = direction;
+                return RaycastToDecisionPoint(direction, Position);
             }
-        }
 
-        return this.Position;
+        return Position;
     }
 
     protected bool IsWall(Vec2 position)
     {
-        return this.Engine.World!.Map[position.Y, position.X].IsSolid;
+        return Engine.World!.Map[position.Y, position.X].IsSolid;
     }
 }

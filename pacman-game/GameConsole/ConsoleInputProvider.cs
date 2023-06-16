@@ -5,10 +5,10 @@ namespace GameConsole;
 
 public class ConsoleInputProvider : InputProvider
 {
-    private Thread worker;
-    private ConcurrentQueue<Signal> signals = new();
-    private ConsoleKeybindings keybindings;
-    private HashSet<Signal> received = new();
+    private readonly ConsoleKeybindings keybindings;
+    private readonly HashSet<Signal> received = new();
+    private readonly ConcurrentQueue<Signal> signals = new();
+    private readonly Thread worker;
 
     public ConsoleInputProvider(ConsoleKeybindings keybindings)
     {
@@ -25,12 +25,13 @@ public class ConsoleInputProvider : InputProvider
             var awaitingRebind = GetAwaitingRebind();
             if (awaitingRebind != null)
             {
-                if (keybindings.IsUsed(key.Key) && keybindings.Get(awaitingRebind.Value) != key.Key) continue;
+                if (keybindings.IsUsed(key.Key) && keybindings.Get(awaitingRebind.Value) != key.Key)
+                    continue;
                 keybindings.Rebind(awaitingRebind.Value, key.Key);
                 ResetRebinding();
                 continue;
             }
-            
+
             var signal = keybindings.Get(key.Key);
             if (signal != null)
                 signals.Enqueue(signal.Value);

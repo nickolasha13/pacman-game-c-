@@ -6,11 +6,11 @@ public class Blinky : Ghost
 {
     public Blinky(Engine engine, Vec2 position) : base(engine, position)
     {
-        this.IsTurnsClockwise = true;
+        IsTurnsClockwise = true;
     }
 
     protected override void UpdateTarget()
     {
-        this.Target = this.Engine.World!.Pacman.Position;
+        Target = Engine.World!.Pacman.Position;
     }
 }

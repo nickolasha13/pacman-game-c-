@@ -9,11 +9,13 @@ public abstract class InputProvider : IDisposable
         Left,
         Right,
         Confirm,
-        Back,
+        Back
     }
 
-    private Object _rebindLock = new();
     private Signal? _awaitingRebind;
+
+    private readonly object _rebindLock = new();
+    public abstract void Dispose();
 
     public void Rebind(Signal signal)
     {
@@ -30,7 +32,7 @@ public abstract class InputProvider : IDisposable
             return _awaitingRebind;
         }
     }
-    
+
     protected void ResetRebinding()
     {
         lock (_rebindLock)
@@ -38,9 +40,8 @@ public abstract class InputProvider : IDisposable
             _awaitingRebind = null;
         }
     }
-    
+
     public abstract void Sync();
     public abstract bool IsReceived(Signal signal);
-    public abstract void Dispose();
-    public abstract String GetSignalBindingAsString(Signal signal);
+    public abstract string GetSignalBindingAsString(Signal signal);
 }

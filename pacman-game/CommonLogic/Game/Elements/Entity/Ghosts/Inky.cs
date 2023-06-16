@@ -6,21 +6,23 @@ public class Inky : Ghost
 {
     public Inky(Engine engine, Vec2 position) : base(engine, position)
     {
-        this.IsTurnsClockwise = true;
+        IsTurnsClockwise = true;
     }
 
     protected override void UpdateTarget()
     {
-        this.Target = GetRandomFloorTile();
+        Target = GetRandomFloorTile();
     }
-    
+
     private Vec2 GetRandomFloorTile()
     {
         var random = new Random();
         while (true)
         {
-            var pos = new Vec2(random.Next(0, this.Engine.World!.Map.GetLength(1)), random.Next(0, this.Engine.World.Map.GetLength(0)));
-            if (!IsWall(pos)) return pos;
+            var pos = new Vec2(random.Next(0, Engine.World!.Map.GetLength(1)),
+                random.Next(0, Engine.World.Map.GetLength(0)));
+            if (!IsWall(pos))
+                return pos;
         }
     }
 }

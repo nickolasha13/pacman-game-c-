@@ -6,7 +6,7 @@ public class KeybindingsMenu : MenuScreen
 {
     public KeybindingsMenu(Engine engine) : base(engine)
     {
-        this.Title = "Keybindings";
+        Title = "Keybindings";
         var entries = new List<Entry>();
         foreach (var signal in Enum.GetValues<InputProvider.Signal>())
         {
@@ -27,7 +27,7 @@ public class KeybindingsMenu : MenuScreen
                 engine.Input.Rebind(signal);
                 rebinding = true;
                 entry.SubText = "Press a key...";
-            }, onUpdate: (MenuScreen screen, ref Entry entry) =>
+            }, (MenuScreen screen, ref Entry entry) =>
             {
                 if (rebinding && engine.Input.GetAwaitingRebind() == null)
                 {
@@ -36,11 +36,11 @@ public class KeybindingsMenu : MenuScreen
                 }
             }, description: signalDescription, subText: "[" + engine.Input.GetSignalBindingAsString(signal) + "]"));
         }
-        
+
         entries.Add(new Entry("<- Back", (MenuScreen screen, ref Entry entry) => { engine.CloseActiveScreen(); },
             description: "Return to settings menu"));
 
-        this.Entries = entries.ToArray();
-        this.BackAction = (screen) => { engine.CloseActiveScreen(); };
+        Entries = entries.ToArray();
+        BackAction = screen => { engine.CloseActiveScreen(); };
     }
 }
