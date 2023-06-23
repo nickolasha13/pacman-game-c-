@@ -63,8 +63,6 @@ public class EngineGui : Engine
                 if (!Extensions.ContainsKey(element.GetType()))
                     continue;
                 var ext = Extensions[element.GetType()];
-                if (ext.GetType().IsInstanceOfType(typeof(RenderExtension<>)))
-                    continue;
 
                 var result = ((IRenderExtension)ext).RenderElement(element, this, deltaTime, x, y);
                 if (result == null)
@@ -80,9 +78,6 @@ public class EngineGui : Engine
                 if (!Extensions.ContainsKey(element.GetType()))
                     continue;
                 var ext = Extensions[element.GetType()];
-
-                if (ext.GetType().IsInstanceOfType(typeof(RenderExtension<>)))
-                    continue;
 
                 var result = ((IRenderExtension)ext).RenderElement(element, this, deltaTime, element.Position.X,
                     element.Position.Y);

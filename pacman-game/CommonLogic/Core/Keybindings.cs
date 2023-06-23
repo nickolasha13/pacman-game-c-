@@ -1,4 +1,4 @@
-namespace CommonLogic.Core;
+﻿namespace CommonLogic.Core;
 
 public abstract class Keybindings<TKey> where TKey : IConvertible
 {

@@ -31,7 +31,7 @@ public class Pacman : EntityElement
         if (Engine.Input.IsReceived(InputProvider.Signal.Right))
             _nextDirection = Direction.Right;
 
-        var positionAfterSwitch = Position.Translate(_nextDirection, 1).WrapBy(Engine.World!.Dimensions);
+        var positionAfterSwitch = Position.TranslateWrapped( _nextDirection, 1, Engine.World!.Dimensions);
         if (!IsWall(positionAfterSwitch))
             Direction = _nextDirection;
 
@@ -46,7 +46,7 @@ public class Pacman : EntityElement
             return;
         _time -= _timeToMove;
 
-        var nextPosition = Position.Translate(Direction, 1).WrapBy(Engine.World!.Dimensions);
+        var nextPosition = Position.TranslateWrapped(Direction, 1, Engine.World!.Dimensions);
         if (IsWall(nextPosition))
             return;
 
